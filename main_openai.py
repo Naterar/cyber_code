@@ -12,7 +12,7 @@ if not api_key:
 openai_client = OpenAI(api_key=api_key)
 
 prompt = '''
-Please describer a STIG in JSON.
+Please describe a STIG in JSON.
 '''
 
 response = openai_client.chat.completions.create(
