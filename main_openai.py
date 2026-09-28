@@ -1,4 +1,5 @@
 import os
+import json
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -12,7 +13,17 @@ if not api_key:
 openai_client = OpenAI(api_key=api_key)
 
 prompt = '''
-Please describer a STIG in JSON.
+Please describe a STIG in JSON format with the following fields:
+- id
+- title
+- description
+- severity
+- status
+- references
+- remediation
+- check
+- fix
+- notes
 '''
 
 response = openai_client.chat.completions.create(
@@ -22,5 +33,9 @@ response = openai_client.chat.completions.create(
 )
 
 answer = response.choices[0].message.content
+answer_dict = json.loads(answer)
 
-print(f"\n{answer}\n")
+# print(f"\n{answer}\n")
+
+print(answer_dict["id"])
+print(answer_dict["title"])
