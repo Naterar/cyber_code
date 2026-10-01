@@ -23,10 +23,13 @@ Sends a prompt to OpenAI and parses the structured JSON response.
 python log_analytics.py
 ```
 
-Authenticates to Azure and queries Microsoft Defender telemetry
-(`DeviceLogonEvents`) via KQL, using the Azure Monitor Query SDK. Confirmed
-working against a live Log Analytics workspace, returning real logon event
-data as CSV.
+`log_analytics.py` authenticates to Azure and queries Microsoft Defender
+telemetry (`DeviceLogonEvents`) via KQL, using the Azure Monitor Query SDK.
+Results are sorted most-recent-first, limited to the fields that matter
+(time, account, action, device, source IP), and timestamps are formatted
+with microsecond precision and UTC offset for forensic accuracy. Confirmed
+working against a live Log Analytics workspace, returning real logon data
+as CSV.
 
 **Next:** feed a queried record into an LLM call so the model performs
 triage on real telemetry instead of a placeholder example.

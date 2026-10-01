@@ -16,9 +16,11 @@ log_analytics_client = LogsQueryClient(credential=DefaultAzureCredential())
 
 hours_ago = 1
 
-kql_query = f'''
+kql_query = '''
 DeviceLogonEvents
+| order by TimeGenerated desc
 | take 10
+| project TimeGenerated, AccountName, ActionType, DeviceName, RemoteIP
 '''
 
 response = log_analytics_client.query_workspace(
@@ -29,16 +31,16 @@ response = log_analytics_client.query_workspace(
 
 table = response.tables[0]
 
-if len(response.tables[0].rows) == 0:
-    print("No data returned from Log Analytics.")
-    exit
-
-record_count = len(response.tables[0].rows)
+if len(table.rows) == 0:
+    raise SystemExit("No data returned from Log Analytics.")
 
 columns = table.columns
 rows = table.rows
 
 df = pd.DataFrame(rows, columns=columns)
+df["TimeGenerated"] = pd.to_datetime(
+    df["TimeGenerated"]).dt.strftime('%Y-%m-%d %H:%M:%S.%f%z')
+
 records = df.to_csv(index=False)
 
 print(records)
