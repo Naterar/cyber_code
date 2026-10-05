@@ -14,7 +14,7 @@ if not LOG_ANALYTICS_WORKSPACE_ID:
 
 log_analytics_client = LogsQueryClient(credential=DefaultAzureCredential())
 
-hours_ago = 1
+HOURS_AGO = 1
 
 kql_query = '''
 DeviceLogonEvents
@@ -26,7 +26,7 @@ DeviceLogonEvents
 response = log_analytics_client.query_workspace(
     workspace_id=LOG_ANALYTICS_WORKSPACE_ID,
     query=kql_query,
-    timespan=timedelta(hours=hours_ago)
+    timespan=timedelta(hours=HOURS_AGO)
 )
 
 table = response.tables[0]
